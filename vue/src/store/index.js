@@ -1,12 +1,84 @@
 import {createStore} from "vuex";
 import axiosClient from "../axios";
 
+const tmpSurveys = [
+  {
+    id: 100,
+    title: 'test',
+    slug: 'test',
+    status: 'draft',
+    image:
+      '',
+    description:
+    'My name is test <br> I am web',
+    created_at: '2022-06-12 15:26:00',
+    updated_at: '2022-06-12 15:26:00',
+    expire_date: '2022-06-30 15:26:00',
+    questions: [
+      {
+        id: 1,
+        type: 'select',
+        question: 'From which country are you?',
+        description: null,
+        data: {
+          options: [
+            { uuid: "1", text: 'USA'},
+            { uuid: "2", text: 'Georgia'},
+            { uuid: "3", text: 'Germany'},
+            { uuid: "4", text: 'India'}
+          ]
+        },
+      },
+      {
+        id: 2,
+        type: 'checkbox',
+        question: 'test',
+        description: 'test',
+        data: {
+          options: [
+            {uuid:"5", text: 'JS'},
+            {uuid: "6", text: 'PHP'},
+
+          ]
+        }
+      },
+      {
+        id: 3,
+        type: 'radio',
+        question: 'test2',
+        description: 'test2',
+        data: {
+          options: [
+            {uuid:"7", text: 'Laravel 5'},
+            {uuid:"8", text: 'Laravel 9'}
+          ]
+        }
+      },
+      {
+        id: 4,
+        type: 'text',
+        question: 'test3',
+        description: null,
+        data: {},
+      },
+      {
+        id: 5,
+        type: 'textarea',
+        question: 'test4',
+        description: 'test4',
+        data: {}
+      }
+    ],
+  }
+]
+
 const store = createStore({
   state: {
     user: {
       data: {},
       token: sessionStorage.getItem("TOKEN"),
-    }
+    },
+    surveys: [...tmpSurveys],
   },
   getters: {},
   actions: {
