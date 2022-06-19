@@ -47,15 +47,17 @@ class SurveyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Survey  $survey
+     * @param \App\Models\Survey $survey
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function show(Survey $survey, Request $request)
     {
         $user = $request->user();
-        if ($user->id !== $survey->user_id){
+        if ($user->id !== 1){
             return abort(403, 'Unauthorized action');
         }
+
         return new SurveyResource($survey);
     }
 
@@ -87,7 +89,8 @@ class SurveyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Survey  $survey
+     * @param \App\Models\Survey $survey
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function destroy(Survey $survey, Request $request)
@@ -97,6 +100,11 @@ class SurveyController extends Controller
             return abort(403, 'Unauthorized action');
         }
         $survey->delete();
+
+        if ($survey->image){
+            $absolutePath = public_path($survey->image);
+            File::delete($absolutePath);
+        }
         return response('',204);
 
     }
