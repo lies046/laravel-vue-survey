@@ -6,6 +6,7 @@ use App\Http\Resources\SurveyResource;
 use App\Models\Survey;
 use App\Http\Requests\StoreSurveyRequest;
 use App\Http\Requests\UpdateSurveyRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -54,7 +55,7 @@ class SurveyController extends Controller
     public function show(Survey $survey, Request $request)
     {
         $user = $request->user();
-        if ($user->id !== 1){
+        if ((int)$user->id !== (int)$survey->user_id){
             return abort(403, 'Unauthorized action');
         }
 

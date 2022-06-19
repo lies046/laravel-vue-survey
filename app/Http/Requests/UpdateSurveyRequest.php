@@ -13,8 +13,8 @@ class UpdateSurveyRequest extends FormRequest
      */
     public function authorize()
     {
-        $survey = $this->route('surveys');
-        if ($this->user()->id !== $survey->user_id){
+        $survey = $this->route('survey');
+        if ((int)$this->user()->id !== (int)$survey->user_id){
             return false;
         }
         return true;
@@ -29,7 +29,7 @@ class UpdateSurveyRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:1000',
-            'image' => 'nullable|string',
+            'image' => 'string',
             'user_id' => 'exists:users,id',
             'status' => 'required|boolean',
             'description' => 'nullable|string',
