@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateSurveyRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 
@@ -72,10 +73,10 @@ class SurveyController extends Controller
     public function update(UpdateSurveyRequest $request, Survey $survey)
     {
         $data = $request->validated();
-
         if (isset($data['image'])){
             $relativePath = $this->saveImage($data['image']);
             $data['image'] = $relativePath;
+
 
             if ($survey->image){
                 $absolutePath = public_path($survey->image);
@@ -83,7 +84,7 @@ class SurveyController extends Controller
             }
         }
 
-        $survey->update($request->validated());
+        $survey->update($data);
         return new SurveyResource($survey);
     }
 
@@ -97,7 +98,7 @@ class SurveyController extends Controller
     public function destroy(Survey $survey, Request $request)
     {
         $user = $request->user();
-        if ($user->id !== $survey->user_id){
+        if ($user->id !== (int)$survey->user_id){
             return abort(403, 'Unauthorized action');
         }
         $survey->delete();
