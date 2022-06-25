@@ -1,77 +1,6 @@
 import {createStore} from "vuex";
 import axiosClient from "../axios";
 
-const tmpSurveys = [
-  {
-    id: 100,
-    title: 'test',
-    slug: 'test',
-    status: 'draft',
-    image:
-      '',
-    description:
-    'My name is test <br> I am web',
-    created_at: '2022-06-12 15:26:00',
-    updated_at: '2022-06-12 15:26:00',
-    expire_date: '2022-06-30 15:26:00',
-    questions: [
-      {
-        id: 1,
-        type: 'select',
-        question: 'From which country are you?',
-        description: null,
-        data: {
-          options: [
-            { uuid: "1", text: 'USA'},
-            { uuid: "2", text: 'Georgia'},
-            { uuid: "3", text: 'Germany'},
-            { uuid: "4", text: 'India'}
-          ]
-        },
-      },
-      {
-        id: 2,
-        type: 'checkbox',
-        question: 'test',
-        description: 'test',
-        data: {
-          options: [
-            {uuid:"5", text: 'JS'},
-            {uuid: "6", text: 'PHP'},
-
-          ]
-        }
-      },
-      {
-        id: 3,
-        type: 'radio',
-        question: 'test2',
-        description: 'test2',
-        data: {
-          options: [
-            {uuid:"7", text: 'Laravel 5'},
-            {uuid:"8", text: 'Laravel 9'}
-          ]
-        }
-      },
-      {
-        id: 4,
-        type: 'text',
-        question: 'test3',
-        description: null,
-        data: {},
-      },
-      {
-        id: 5,
-        type: 'textarea',
-        question: 'test4',
-        description: 'test4',
-        data: {}
-      }
-    ],
-  }
-]
-
 const store = createStore({
   state: {
     user: {
@@ -82,7 +11,10 @@ const store = createStore({
       loading: false,
       data: {}
     },
-    surveys: [...tmpSurveys],
+    surveys: {
+      loading: false,
+      data: []
+    },
     questionTypes: ["text", "select", "radio", "checkbox", "textarea"]
   },
   getters: {},
@@ -123,6 +55,14 @@ const store = createStore({
     deleteSurvey({}, id){
       return axiosClient.delete(`/survey/${id}`);
     },
+    getSurveys({commit}){
+      commit('setSurveysLoading', true)
+      return axiosClient.get("/survey").then((res) => {
+        commit('setSurveysLoading', false)
+        commit('setSurveys', res.data);
+        return res;
+      })
+    },
     register({ commit }, user){
       return axiosClient.post('/register', user)
         .then(({data}) => {
@@ -149,8 +89,14 @@ const store = createStore({
     setCurrentSurveyLoading: (state, loading) => {
       state.currentSurvey.loading = loading;
     },
+    setSurveysLoading: (state, loading) => {
+      state.surveys.loading = loading;
+    },
     setCurrentSurvey: (state, survey) => {
       state.currentSurvey.data = survey.data;
+    },
+    setSurveys: (state, surveys) => {
+      state.surveys.data = surveys.data;
     },
     logout: state => {
       state.user.data = {};
