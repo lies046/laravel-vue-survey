@@ -21,12 +21,17 @@
         </router-link>
       </div>
     </template>
+    <div v-if="surveys.loading" class="flex justify-center">Loading...</div>
+    <div v-else>
     <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
       <SurveyListItem
-        v-for="survey in surveys"
+        v-for="(survey, index) in surveys.data"
         :key="survey.id"
         :survey="survey"
+        class="opacity-0 animate-fade-in-down"
+        :style="{animationDelay: `${index * 0.1}s`}"
         @delete="deleteSurvey(survey)" />
+    </div>
     </div>
   </PageComponent>
 </template>
@@ -37,7 +42,7 @@ import {computed} from "vue";
 import PageComponent from '../components/PageComponent.vue'
 import SurveyListItem from "../components/SurveyListItem.vue";
 
-const surveys = computed(() => store.state.surveys.data);
+const surveys = computed(() => store.state.surveys);
 
 store.dispatch('getSurveys');
 

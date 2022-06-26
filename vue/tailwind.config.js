@@ -13,7 +13,7 @@ module.exports = {
             opacity: '0'
           },
           'to': {
-            transform: 'translateY(0rem)',
+            transform: 'translateY(2rem)',
             opacity: '1'
           },
         },
