@@ -171,7 +171,6 @@ class SurveyController extends Controller
             'data' => 'present',
             'survey_id' => 'exists:App\Models\Survey,id'
         ]);
-
         return SurveyQuestion::create($validator->validated());
     }
 }
